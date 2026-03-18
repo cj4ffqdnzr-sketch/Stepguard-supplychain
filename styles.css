@@ -9,22 +9,23 @@ main { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
 .intro p { color: #666; font-size: 1.1em; max-width: 700px; margin: 0 auto; }
 .supply-chain { margin-bottom: 60px; }
 .chain-container { display: flex; flex-wrap: wrap; gap: 0; overflow-x: auto; padding: 20px 0; }
-.chain-stage { flex: 1; min-width: 220px; background: white; border-radius: 8px; padding: 25px 20px; margin-right: -1px; position: relative; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; border-left: 5px solid #FFC107; }
+.chain-stage { flex: 1; min-width: 240px; background: white; border-radius: 8px; padding: 25px 20px; margin-right: -1px; position: relative; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; border-left: 5px solid #FFC107; display: flex; flex-direction: column; align-items: center; }
 .chain-stage:hover { transform: translateY(-5px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
 .stage-number { position: absolute; top: -15px; left: 20px; background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2em; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
+.stage-icon { margin: 20px 0 15px 0; display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; }
+.stage-content { text-align: center; }
 .company-logo { display: inline-block; background-color: #FFC107; color: white; padding: 8px 12px; border-radius: 4px; font-size: 0.85em; font-weight: 600; margin-bottom: 15px; letter-spacing: 1px; }
 .stage-content h3 { color: #FF9800; margin-bottom: 8px; font-size: 1.2em; }
 .stage-description { color: #666; font-size: 0.95em; margin-bottom: 15px; }
-.details { list-style: none; padding-left: 0; }
+.details { list-style: none; padding-left: 0; text-align: left; }
 .details li { color: #555; padding: 6px 0; padding-left: 20px; position: relative; font-size: 0.95em; }
 .details li:before { content: "✓"; position: absolute; left: 0; color: #FFC107; font-weight: bold; }
-.arrow { display: none; }
-@media (max-width: 768px) { .chain-container { flex-direction: column; } .chain-stage { margin-right: 0; } }
 .benefits { margin-bottom: 60px; }
 .benefits h2 { text-align: center; color: #FF9800; font-size: 2em; margin-bottom: 40px; }
 .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-.benefit-card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; border-top: 4px solid #FFC107; text-align: center; }
+.benefit-card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; border-top: 4px solid #FFC107; text-align: center; display: flex; flex-direction: column; align-items: center; }
 .benefit-card:hover { transform: translateY(-5px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); border-top-color: #FF9800; }
+.benefit-icon { margin-bottom: 15px; display: flex; align-items: center; justify-content: center; }
 .benefit-card h4 { color: #FF9800; margin-bottom: 12px; font-size: 1.3em; }
 .benefit-card p { color: #666; line-height: 1.8; }
 .partners { margin-bottom: 60px; }
@@ -36,4 +37,4 @@ main { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
 .partner-card p { color: #666; line-height: 1.8; }
 footer { background: linear-gradient(135deg, #333 0%, #555 100%); color: white; text-align: center; padding: 30px 20px; margin-top: 60px; box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1); }
 footer p { margin: 5px 0; }
-@media (max-width: 768px) { header h1 { font-size: 2em; } .intro h2, .benefits h2, .partners h2 { font-size: 1.5em; } .benefits-grid, .partners-grid { grid-template-columns: 1fr; } }
+@media (max-width: 768px) { header h1 { font-size: 2em; } .intro h2, .benefits h2, .partners h2 { font-size: 1.5em; } .benefits-grid, .partners-grid { grid-template-columns: 1fr; } .chain-container { flex-direction: column; } .chain-stage { margin-right: 0; } }
