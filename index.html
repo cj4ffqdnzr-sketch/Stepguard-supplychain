@@ -1,37 +1,1154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stepguard Supply Chain</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stepguard · Supply Chain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0b0b0b;
+    --bg-soft: #141414;
+    --bg-card: #1a1a1a;
+    --line: #262626;
+    --line-bright: #3a3a3a;
+    --text: #e8e8e8;
+    --text-dim: #8a8a8a;
+    --text-muted: #5a5a5a;
+    --accent: #f5d014;
+    --accent-deep: #c9a50a;
+    --accent-glow: rgba(245, 208, 20, 0.18);
+    --danger: #ff5a4d;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Archivo", system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.55;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Subtle grain overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(11,11,11,0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .logo {
+    font-family: "Archivo Black", sans-serif;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-mark {
+    width: 26px; height: 26px;
+    background: var(--accent);
+    color: #000;
+    display: grid;
+    place-items: center;
+    font-family: "Archivo Black";
+    font-size: 14px;
+    transform: skewX(-12deg);
+  }
+  .logo-mark span { transform: skewX(12deg); }
+  nav ul {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  nav ul a {
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+    font-weight: 500;
+  }
+  nav ul a:hover { color: var(--accent); }
+  .nav-badge {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    border: 1px solid var(--line);
+    padding: 6px 10px;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    padding: 140px 40px 80px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 80px 80px;
+    opacity: 0.35;
+    mask-image: radial-gradient(ellipse at 70% 40%, black 30%, transparent 75%);
+  }
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 65%);
+    top: -15%; right: -10%;
+    pointer-events: none;
+    filter: blur(40px);
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    padding: 8px 14px;
+    border: 1px solid var(--accent-deep);
+    background: rgba(245,208,20,0.06);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+
+  h1.display {
+    font-family: "Archivo Black", sans-serif;
+    font-size: clamp(52px, 9vw, 148px);
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  h1.display .stroke {
+    -webkit-text-stroke: 2px var(--text);
+    color: transparent;
+    font-style: italic;
+  }
+  h1.display .accent {
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-top: 60px;
+    align-items: end;
+  }
+  .lede {
+    font-size: 20px;
+    color: var(--text-dim);
+    max-width: 520px;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+  .lede strong { color: var(--text); font-weight: 500; }
+  .hero-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .hero-meta div {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dashed var(--line);
+    padding-bottom: 10px;
+  }
+  .hero-meta span:last-child { color: var(--text); }
+
+  .hero-scroll {
+    position: relative;
+    z-index: 2;
+    margin-top: 80px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-scroll::after {
+    content: "";
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, var(--text-muted), transparent);
+  }
+
+  /* ===== SECTION SHELL ===== */
+  section {
+    position: relative;
+    z-index: 2;
+    padding: 120px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .section-head {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 60px;
+    margin-bottom: 80px;
+    align-items: start;
+  }
+  .section-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding-top: 10px;
+    border-top: 2px solid var(--accent);
+    display: inline-block;
+  }
+  .section-title {
+    font-family: "Archivo Black", sans-serif;
+    font-size: clamp(32px, 5vw, 60px);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+  .section-title em {
+    font-style: italic;
+    color: var(--accent);
+    font-family: "Archivo";
+    font-weight: 800;
+  }
+  .section-intro {
+    font-size: 17px;
+    color: var(--text-dim);
+    margin-top: 28px;
+    max-width: 680px;
+    line-height: 1.6;
+  }
+
+  /* ===== PRODUCT SECTION ===== */
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 60px;
+    align-items: stretch;
+  }
+  .product-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    padding: 40px;
+    position: relative;
+  }
+  .product-card::before {
+    content: "";
+    position: absolute;
+    top: -1px; left: -1px;
+    width: 40px; height: 2px;
+    background: var(--accent);
+  }
+  .product-card h3 {
+    font-family: "Archivo Black";
+    font-size: 28px;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .product-card p {
+    color: var(--text-dim);
+    margin-bottom: 16px;
+    font-size: 15px;
+  }
+  .spec-list {
+    list-style: none;
+    margin-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+  .spec-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+  }
+  .spec-list li span:first-child { color: var(--text-muted); }
+  .spec-list li span:last-child { color: var(--text); }
+
+  .visual-card {
+    background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+    border: 1px solid var(--line);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .visual-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(45deg, transparent 0, transparent 20px, rgba(245,208,20,0.02) 20px, rgba(245,208,20,0.02) 21px);
+  }
+  .escalator-svg {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ===== SUPPLY CHAIN FLOW ===== */
+  .flow-wrapper {
+    margin-top: 40px;
+    position: relative;
+  }
+  .phase-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 40px;
+    padding: 50px 0;
+    border-top: 1px solid var(--line);
+    position: relative;
+  }
+  .phase-row:last-child { border-bottom: 1px solid var(--line); }
+  .phase-label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 10px;
+  }
+  .phase-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--accent);
+  }
+  .phase-name {
+    font-family: "Archivo Black";
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  .phase-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 10px;
+    max-width: 160px;
+  }
+
+  .companies {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+  .company {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    padding: 24px;
+    transition: all 0.3s ease;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+  .company::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 0; height: 3px;
+    background: var(--accent);
+    transition: width 0.4s ease;
+  }
+  .company:hover {
+    border-color: var(--line-bright);
+    transform: translateY(-3px);
+    background: #1f1f1f;
+  }
+  .company:hover::after { width: 100%; }
+  .company-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .company-name {
+    font-family: "Archivo Black";
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+  .company-role {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--accent);
+    padding: 3px 7px;
+    border: 1px solid var(--accent-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .company-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.55;
+  }
+
+  /* Flow connector (mobile-friendly, visual pipeline between rows) */
+  .phase-row::before {
+    content: "";
+    position: absolute;
+    left: 90px;
+    top: -1px;
+    height: calc(100% + 1px);
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), transparent 98%);
+    opacity: 0.3;
+  }
+  .phase-row:first-child::before { top: 50%; height: 50%; }
+  .phase-row:last-child::before { height: 50%; }
+
+  /* ===== VALUE SECTION ===== */
+  .values {
+    background: var(--bg-soft);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 100px 0;
+    margin-top: 80px;
+    position: relative;
+  }
+  .values-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    margin-top: 60px;
+    border: 1px solid var(--line);
+  }
+  .value-cell {
+    background: var(--bg-soft);
+    padding: 44px 32px;
+    transition: background 0.3s;
+  }
+  .value-cell:hover { background: #181818; }
+  .value-icon {
+    width: 44px; height: 44px;
+    display: grid;
+    place-items: center;
+    color: var(--accent);
+    margin-bottom: 22px;
+  }
+  .value-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .value-title {
+    font-family: "Archivo Black";
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+    margin-bottom: 14px;
+  }
+  .value-body {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.55;
+  }
+
+  /* ===== DIAGRAM SECTION ===== */
+  .diagram-section { padding-top: 60px; }
+  .diagram-wrap {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    padding: 50px 40px;
+    overflow-x: auto;
+    position: relative;
+  }
+  .diagram-wrap::before {
+    content: "FIG.07 — SUPPLY CHAIN DIAGRAM";
+    position: absolute;
+    top: 16px; left: 20px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+  }
+  svg.chain { width: 100%; height: auto; min-width: 720px; display: block; margin-top: 20px; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: #000;
+    padding: 80px 40px 40px;
+    border-top: 1px solid var(--line);
+  }
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 60px;
+  }
+  .footer-big {
+    font-family: "Archivo Black";
+    font-size: clamp(40px, 6vw, 88px);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+  .footer-big em {
+    font-style: italic;
+    color: var(--accent);
+    font-family: "Archivo";
+    font-weight: 800;
+  }
+  .footer-col h4 {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .footer-col ul { list-style: none; font-size: 14px; color: var(--text-dim); }
+  .footer-col li { padding: 6px 0; }
+  .footer-bottom {
+    max-width: 1400px;
+    margin: 80px auto 0;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* ===== REVEAL ANIMATIONS ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .stagger > *:nth-child(1) { transition-delay: 0s; }
+  .stagger > *:nth-child(2) { transition-delay: 0.08s; }
+  .stagger > *:nth-child(3) { transition-delay: 0.16s; }
+  .stagger > *:nth-child(4) { transition-delay: 0.24s; }
+  .stagger > *:nth-child(5) { transition-delay: 0.32s; }
+
+  /* Hero text animation */
+  .hero h1.display, .hero .eyebrow, .hero .hero-sub, .hero .hero-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: heroRise 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+  .hero .eyebrow { animation-delay: 0.1s; }
+  .hero h1.display { animation-delay: 0.25s; }
+  .hero .hero-sub { animation-delay: 0.5s; }
+  .hero .hero-scroll { animation-delay: 0.8s; }
+  @keyframes heroRise {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 960px) {
+    nav { padding: 16px 20px; }
+    nav ul { display: none; }
+    .hero { padding: 120px 20px 60px; }
+    section { padding: 80px 20px; }
+    .section-head { grid-template-columns: 1fr; gap: 16px; }
+    .hero-sub { grid-template-columns: 1fr; gap: 36px; }
+    .product-grid { grid-template-columns: 1fr; }
+    .phase-row { grid-template-columns: 1fr; gap: 20px; padding: 36px 0; }
+    .phase-row::before { display: none; }
+    .values-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-inner { grid-template-columns: 1fr; gap: 40px; }
+    .footer-bottom { flex-direction: column; gap: 10px; }
+    .values-inner { padding: 0 20px; }
+    footer { padding: 60px 20px 30px; }
+  }
+</style>
 </head>
 <body>
-    <header>
-        <h1>Stepguard Supply Chain</h1>
-    </header>
-    <main>
-        <section class="stage">
-            <h2>Stage 5</h2>
-            <div>
-                <!-- Content for Stage 5 -->
-            </div>  <!-- Fixed closing </div> tag for Stage 5 -->
-        </section>
-        <section class="partners-grid">
-            <h2>Our Partners</h2>
-            <div class="partner-card">
-                <!-- SVG and content for Partner 1 -->
-            </div>
-            <div class="partner-card">
-                <!-- SVG and content for Partner 2 -->
-            </div>
-            <div class="partner-card">
-                <!-- SVG and content for Partner 3 -->
-            </div>
-            <!-- Removed duplicate Catyra partner cards and moved all partner cards inside the .partners-grid container -->
-        </section>
-    </main>
-    <footer>
-        <p>Improved partner descriptions and corrected grammar: "And camera's" → "and Cameras".</p>
-    </footer>
+
+<nav>
+  <div class="logo">
+    <div class="logo-mark"><span>C</span></div>
+    STEPGUARD / SUPPLY CHAIN
+  </div>
+  <ul>
+    <li><a href="#product">Product</a></li>
+    <li><a href="#chain">Supply Chain</a></li>
+    <li><a href="#value">Value</a></li>
+    <li><a href="#diagram">Diagram</a></li>
+  </ul>
+  <div class="nav-badge">v4 · 2026</div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-inner">
+    <div class="eyebrow">Cboost · Patent Pending · Industrial IoT</div>
+    <h1 class="display">
+      The supply<br />
+      <span class="stroke">chain behind</span><br />
+      <span class="accent">Stepguard.</span>
+    </h1>
+
+    <div class="hero-sub">
+      <p class="lede">
+        An AI-vision sensor that keeps escalators running. <strong>Seven companies</strong> — from
+        Dutch hardware manufacturers to software specialists to field-repair teams — move a single
+        box from the factory floor to beneath the steps of Europe's busiest train stations.
+      </p>
+      <div class="hero-meta">
+        <div><span>Product</span><span>Cboost Stepguard</span></div>
+        <div><span>Sensor unit</span><span>€20–30k / escalator</span></div>
+        <div><span>Patent status</span><span>Pending</span></div>
+        <div><span>Core partners</span><span>07</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">Scroll · upstream to end-user</div>
+</header>
+
+<!-- PRODUCT -->
+<section id="product">
+  <div class="section-head">
+    <div class="section-tag reveal">01 — The Product</div>
+    <div>
+      <h2 class="section-title reveal">What moves through<br/>the chain?</h2>
+      <p class="section-intro reveal">
+        Stepguard is a sensor box fixed underneath an escalator. Industrial IDS cameras continuously
+        scan every step under low-light conditions. An on-edge AI vision model flags wear, damage
+        and misalignment long before a breakdown — feeding a web dashboard that triggers a four-level
+        alarm and schedules the fix.
+      </p>
+    </div>
+  </div>
+
+  <div class="product-grid">
+    <div class="product-card reveal">
+      <h3>The Sensor Box</h3>
+      <p>A slim, patented unit that combines IDS industrial cameras, edge compute, and LED lighting into a housing mounted below the step band.</p>
+      <ul class="spec-list">
+        <li><span>Width</span><span>600–750 mm</span></li>
+        <li><span>Depth</span><span>40–150 mm</span></li>
+        <li><span>Min. step distance</span><span>100–200 mm</span></li>
+        <li><span>Max. step distance</span><span>~500 mm</span></li>
+        <li><span>Camera</span><span>IDS U3-3686XLE</span></li>
+        <li><span>Lifetime extension</span><span>2× – 5×</span></li>
+        <li><span>Software licence</span><span>€1,000 / year</span></li>
+      </ul>
+    </div>
+
+    <div class="visual-card reveal">
+      <svg class="escalator-svg" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+        <!-- Escalator track -->
+        <g stroke="#f5d014" stroke-width="1.2" fill="none" opacity="0.9">
+          <path d="M 20 220 L 380 80" />
+          <path d="M 20 230 L 380 90" />
+          <path d="M 20 240 L 380 100" />
+        </g>
+        <!-- Step lines -->
+        <g stroke="#3a3a3a" stroke-width="0.6" fill="none">
+          <line x1="50" y1="225" x2="60" y2="215" />
+          <line x1="90" y1="210" x2="100" y2="200" />
+          <line x1="130" y1="195" x2="140" y2="185" />
+          <line x1="170" y1="180" x2="180" y2="170" />
+          <line x1="210" y1="165" x2="220" y2="155" />
+          <line x1="250" y1="150" x2="260" y2="140" />
+          <line x1="290" y1="135" x2="300" y2="125" />
+          <line x1="330" y1="120" x2="340" y2="110" />
+        </g>
+        <!-- Sensor box -->
+        <g transform="translate(180 90)">
+          <rect x="-50" y="-10" width="100" height="20" fill="#f5d014" stroke="#000" stroke-width="1" />
+          <rect x="-46" y="-7" width="92" height="14" fill="#0b0b0b" />
+          <!-- 4 camera dots -->
+          <circle cx="-30" cy="0" r="3" fill="#f5d014" />
+          <circle cx="-10" cy="0" r="3" fill="#f5d014" />
+          <circle cx="10" cy="0" r="3" fill="#f5d014" />
+          <circle cx="30" cy="0" r="3" fill="#f5d014" />
+          <!-- Scan lines -->
+          <g opacity="0.5" stroke="#f5d014" stroke-width="0.8" stroke-dasharray="2 2">
+            <line x1="-30" y1="3" x2="-30" y2="60" />
+            <line x1="-10" y1="3" x2="-10" y2="60" />
+            <line x1="10" y1="3" x2="10" y2="60" />
+            <line x1="30" y1="3" x2="30" y2="60" />
+          </g>
+        </g>
+        <!-- Label -->
+        <text x="200" y="70" text-anchor="middle" fill="#8a8a8a" font-family="JetBrains Mono" font-size="8" letter-spacing="1">SENSOR BOX ↓ SCANS ↓ AI VISION</text>
+      </svg>
+      <div style="position:relative; z-index:2; margin-top:20px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-muted); letter-spacing:0.1em;">MECHANISM</div>
+        <div style="margin-top:8px; color:var(--text-dim); font-size:14px; line-height:1.5;">
+          Cameras observe · edge AI classifies wear · cloud aggregates · dashboard alarms · technician dispatched.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUPPLY CHAIN FLOW -->
+<section id="chain">
+  <div class="section-head">
+    <div class="section-tag reveal">02 — The Chain</div>
+    <div>
+      <h2 class="section-title reveal">From <em>factory floor</em><br/>to escalator step.</h2>
+      <p class="section-intro reveal">
+        The supply chain splits into four phases. Hardware is sourced and built, Cboost integrates
+        the AI stack on top of Levarne's platform, the system is installed and monitored in the
+        field, and local partners handle repair. Every arrow is a handoff.
+      </p>
+    </div>
+  </div>
+
+  <div class="flow-wrapper">
+
+    <!-- PHASE 1 -->
+    <div class="phase-row">
+      <div class="phase-label">
+        <div class="phase-num">PHASE 01</div>
+        <div class="phase-name">Hardware<br/>& Components</div>
+        <div class="phase-desc">Cameras and sensor assembly are sourced and manufactured upstream of Cboost.</div>
+      </div>
+      <div class="companies stagger reveal">
+        <div class="company">
+          <div class="company-header">
+            <div class="company-name">IDS Imaging</div>
+            <div class="company-role">Supplier</div>
+          </div>
+          <div class="company-desc">
+            German industrial-camera maker. Supplies the U3-3686XLE: a compact low-light camera that
+            fits the tight, dark space beneath an escalator step.
+          </div>
+        </div>
+        <div class="company">
+          <div class="company-header">
+            <div class="company-name">Ex Robotics</div>
+            <div class="company-role">Manufacturer</div>
+          </div>
+          <div class="company-desc">
+            Assembles and distributes the Stepguard sensor hardware to Cboost. The factory endpoint
+            where cameras, lighting and housing come together as a finished unit.
+          </div>
+        </div>
+        <div class="company">
+          <div class="company-header">
+            <div class="company-name">Cirrix</div>
+            <div class="company-role">Partner</div>
+          </div>
+          <div class="company-desc">
+            One of the four core companies surrounding Stepguard, feeding into the technical build
+            alongside Ex Robotics and Watertech.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="phase-row">
+      <div class="phase-label">
+        <div class="phase-num">PHASE 02</div>
+        <div class="phase-name">AI Stack<br/>& Platform</div>
+        <div class="phase-desc">The hardware meets software — Cboost's AI vision on Levarne's asset management platform.</div>
+      </div>
+      <div class="companies stagger reveal">
+        <div class="company" style="border-color: var(--accent-deep);">
+          <div class="company-header">
+            <div class="company-name">Cboost</div>
+            <div class="company-role" style="background: var(--accent); color: #000;">CORE</div>
+          </div>
+          <div class="company-desc">
+            Owns the patent-pending AI vision and predictive-analytics combination. Integrates
+            hardware, trains the models, installs at customer sites, and runs the monitoring. Eighteen
+            FTE, Den Dolder HQ.
+          </div>
+        </div>
+        <div class="company">
+          <div class="company-header">
+            <div class="company-name">Levarne</div>
+            <div class="company-role">Software</div>
+          </div>
+          <div class="company-desc">
+            Dutch software house behind the <em>Eventual</em> asset-management platform. Provides the
+            dashboards, predictive alerts and customer-facing web interface.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 3 -->
+    <div class="phase-row">
+      <div class="phase-label">
+        <div class="phase-num">PHASE 03</div>
+        <div class="phase-name">Field Install<br/>& Service</div>
+        <div class="phase-desc">Cboost installs and monitors. Local specialists handle the physical repairs it flags.</div>
+      </div>
+      <div class="companies stagger reveal">
+        <div class="company">
+          <div class="company-header">
+            <div class="company-name">VDB Vochtwering</div>
+            <div class="company-role">Repairs</div>
+          </div>
+          <div class="company-desc">
+            Construction-sector specialist in water damage and leakages. Plugged into the Cboost
+            asset-management platform to arrange on-site repairs once the system flags an issue.
+          </div>
+        </div>
+        <div class="company">
+          <div class="company-header">
+            <div class="company-name">Watertech</div>
+            <div class="company-role">Sister platform</div>
+          </div>
+          <div class="company-desc">
+            Shares Cboost's backend. Not a direct Stepguard supplier, but a bundling partner — one
+            contract can cover water sensors in lifts and step sensors on escalators for customers
+            like NS.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 4 -->
+    <div class="phase-row">
+      <div class="phase-label">
+        <div class="phase-num">PHASE 04</div>
+        <div class="phase-name">End<br/>Customer</div>
+        <div class="phase-desc">The asset owners who see fewer shutdowns and extended step lifetimes.</div>
+      </div>
+      <div class="companies stagger reveal">
+        <div class="company">
+          <div class="company-header">
+            <div class="company-name">NS</div>
+            <div class="company-role">Launching · NL</div>
+          </div>
+          <div class="company-desc">
+            Dutch national railway. The anchor launching customer where Stepguard has been piloted on
+            station escalators.
+          </div>
+        </div>
+        <div class="company">
+          <div class="company-header">
+            <div class="company-name">Transport operators</div>
+            <div class="company-role">Target · DE</div>
+          </div>
+          <div class="company-desc">
+            Next market: Munich (MVG, 772+ escalators), Berlin (BVG), Frankfurt (FVG, 600+) and
+            Deutsche Bahn. Entry through DHI subsidy and direct-to-operator sales.
+          </div>
+        </div>
+        <div class="company">
+          <div class="company-header">
+            <div class="company-name">Airports & malls</div>
+            <div class="company-role">Expansion</div>
+          </div>
+          <div class="company-desc">
+            Germany's 32 commercial airports plus ECE-group shopping centres — heavy-use environments
+            where wear-and-tear drives breakdowns.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUE ADD -->
+<section id="value" class="values" style="max-width:none; margin: 0; padding: 100px 0;">
+  <div class="values-inner">
+    <div class="section-head">
+      <div class="section-tag reveal">03 — Value Add</div>
+      <div>
+        <h2 class="section-title reveal">What Cboost <em>adds</em><br/>between factory and step.</h2>
+        <p class="section-intro reveal">
+          Hardware on its own is just metal and glass. The value is in the data layer Cboost wraps
+          around it — the four benefits that turn a camera into a maintenance contract.
+        </p>
+      </div>
+    </div>
+
+    <div class="values-grid reveal">
+      <div class="value-cell">
+        <div class="value-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+          </svg>
+        </div>
+        <div class="value-num">// 01</div>
+        <div class="value-title">Real-time<br/>monitoring</div>
+        <div class="value-body">Continuous scanning under the steps — no more waiting for quarterly inspection rounds.</div>
+      </div>
+
+      <div class="value-cell">
+        <div class="value-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/>
+          </svg>
+        </div>
+        <div class="value-num">// 02</div>
+        <div class="value-title">Data-driven<br/>insights</div>
+        <div class="value-body">Incident counts, availability %, downtime causes — surfaced in dashboards operators can act on.</div>
+      </div>
+
+      <div class="value-cell">
+        <div class="value-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/>
+          </svg>
+        </div>
+        <div class="value-num">// 03</div>
+        <div class="value-title">Proactive<br/>maintenance</div>
+        <div class="value-body">A four-level alarm system dispatches teams before small damage becomes a full shutdown.</div>
+      </div>
+
+      <div class="value-cell">
+        <div class="value-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>
+          </svg>
+        </div>
+        <div class="value-num">// 04</div>
+        <div class="value-title">Enhanced<br/>safety</div>
+        <div class="value-body">For the millions of commuters standing on the steps — and the engineers who service them.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIAGRAM -->
+<section id="diagram" class="diagram-section">
+  <div class="section-head">
+    <div class="section-tag reveal">04 — Diagram</div>
+    <div>
+      <h2 class="section-title reveal">The flow,<br/>in one picture.</h2>
+      <p class="section-intro reveal">
+        Hardware moves left to right. Data moves back — from the escalator, through the platform,
+        to Cboost, which dispatches either an alert or a repair partner.
+      </p>
+    </div>
+  </div>
+
+  <div class="diagram-wrap reveal">
+    <svg class="chain" viewBox="0 0 1200 360" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#f5d014" />
+        </marker>
+        <marker id="arrow-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#5a5a5a" />
+        </marker>
+      </defs>
+
+      <!-- Phase labels -->
+      <g font-family="JetBrains Mono" font-size="9" fill="#5a5a5a" letter-spacing="2">
+        <text x="100" y="30">PHASE 01 · HARDWARE</text>
+        <text x="470" y="30">PHASE 02 · PLATFORM</text>
+        <text x="820" y="30">PHASE 03 · FIELD</text>
+        <text x="1060" y="30">PHASE 04 · CUSTOMER</text>
+      </g>
+
+      <!-- Dividing lines -->
+      <g stroke="#262626" stroke-dasharray="4 4" stroke-width="1">
+        <line x1="380" y1="50" x2="380" y2="340" />
+        <line x1="720" y1="50" x2="720" y2="340" />
+        <line x1="990" y1="50" x2="990" y2="340" />
+      </g>
+
+      <!-- PHASE 1 nodes -->
+      <g>
+        <rect x="40" y="70" width="140" height="50" fill="#1a1a1a" stroke="#3a3a3a" />
+        <text x="110" y="92" text-anchor="middle" fill="#e8e8e8" font-family="Archivo Black" font-size="13">IDS IMAGING</text>
+        <text x="110" y="108" text-anchor="middle" fill="#8a8a8a" font-family="JetBrains Mono" font-size="9">Cameras</text>
+
+        <rect x="210" y="140" width="140" height="50" fill="#1a1a1a" stroke="#3a3a3a" />
+        <text x="280" y="162" text-anchor="middle" fill="#e8e8e8" font-family="Archivo Black" font-size="13">EX ROBOTICS</text>
+        <text x="280" y="178" text-anchor="middle" fill="#8a8a8a" font-family="JetBrains Mono" font-size="9">Manufacturing</text>
+
+        <rect x="40" y="210" width="140" height="50" fill="#1a1a1a" stroke="#3a3a3a" />
+        <text x="110" y="232" text-anchor="middle" fill="#e8e8e8" font-family="Archivo Black" font-size="13">CIRRIX</text>
+        <text x="110" y="248" text-anchor="middle" fill="#8a8a8a" font-family="JetBrains Mono" font-size="9">Partner</text>
+      </g>
+
+      <!-- PHASE 2 nodes -->
+      <g>
+        <rect x="410" y="140" width="160" height="60" fill="#f5d014" stroke="#f5d014" />
+        <text x="490" y="165" text-anchor="middle" fill="#000" font-family="Archivo Black" font-size="16">CBOOST</text>
+        <text x="490" y="182" text-anchor="middle" fill="#000" font-family="JetBrains Mono" font-size="9">AI · Install · Monitor</text>
+
+        <rect x="600" y="70" width="100" height="50" fill="#1a1a1a" stroke="#3a3a3a" />
+        <text x="650" y="92" text-anchor="middle" fill="#e8e8e8" font-family="Archivo Black" font-size="13">LEVARNE</text>
+        <text x="650" y="108" text-anchor="middle" fill="#8a8a8a" font-family="JetBrains Mono" font-size="9">Platform</text>
+      </g>
+
+      <!-- PHASE 3 nodes -->
+      <g>
+        <rect x="750" y="90" width="180" height="50" fill="#1a1a1a" stroke="#3a3a3a" />
+        <text x="840" y="112" text-anchor="middle" fill="#e8e8e8" font-family="Archivo Black" font-size="13">VDB VOCHTWERING</text>
+        <text x="840" y="128" text-anchor="middle" fill="#8a8a8a" font-family="JetBrains Mono" font-size="9">Repair dispatch</text>
+
+        <rect x="750" y="220" width="180" height="50" fill="#1a1a1a" stroke="#3a3a3a" />
+        <text x="840" y="242" text-anchor="middle" fill="#e8e8e8" font-family="Archivo Black" font-size="13">WATERTECH</text>
+        <text x="840" y="258" text-anchor="middle" fill="#8a8a8a" font-family="JetBrains Mono" font-size="9">Bundled sensors</text>
+      </g>
+
+      <!-- PHASE 4 nodes -->
+      <g>
+        <rect x="1020" y="155" width="150" height="60" fill="#1a1a1a" stroke="#f5d014" />
+        <text x="1095" y="180" text-anchor="middle" fill="#e8e8e8" font-family="Archivo Black" font-size="13">CUSTOMER</text>
+        <text x="1095" y="198" text-anchor="middle" fill="#f5d014" font-family="JetBrains Mono" font-size="9">NS · MVG · BVG</text>
+      </g>
+
+      <!-- Arrows: hardware flow (yellow) -->
+      <g fill="none" stroke="#f5d014" stroke-width="1.5">
+        <path d="M 180 95 Q 200 95 210 160" marker-end="url(#arrow)" />
+        <path d="M 180 235 Q 200 235 210 180" marker-end="url(#arrow)" />
+        <path d="M 350 165 L 410 170" marker-end="url(#arrow)" />
+        <path d="M 600 100 L 570 150" marker-end="url(#arrow)" />
+        <path d="M 570 170 L 1020 180" marker-end="url(#arrow)" />
+      </g>
+
+      <!-- Arrows: data/dispatch (dim, dashed) -->
+      <g fill="none" stroke="#5a5a5a" stroke-width="1" stroke-dasharray="4 3">
+        <path d="M 490 200 L 840 220" marker-end="url(#arrow-dim)" />
+        <path d="M 570 150 Q 600 130 750 115" marker-end="url(#arrow-dim)" />
+      </g>
+
+      <!-- Legend -->
+      <g font-family="JetBrains Mono" font-size="10" fill="#8a8a8a">
+        <line x1="40" y1="320" x2="70" y2="320" stroke="#f5d014" stroke-width="1.5" marker-end="url(#arrow)" />
+        <text x="80" y="324">Hardware / product flow</text>
+        <line x1="280" y1="320" x2="310" y2="320" stroke="#5a5a5a" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arrow-dim)" />
+        <text x="320" y="324">Data / dispatch signal</text>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-big">
+      One sensor. <em>Seven partners.</em> Zero shutdowns.
+    </div>
+    <div class="footer-col">
+      <h4>The Chain</h4>
+      <ul>
+        <li>IDS Imaging</li>
+        <li>Ex Robotics</li>
+        <li>Cirrix</li>
+        <li>Cboost</li>
+        <li>Levarne</li>
+        <li>VDB Vochtwering</li>
+        <li>Watertech</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Document</h4>
+      <ul>
+        <li>Research: Rem van der Heijden</li>
+        <li>Project: Cboost Stepguard v4</li>
+        <li>Context: German market entry</li>
+        <li>Date: 2026</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 · Supply-chain overview · Stepguard BV (proposed)</div>
+    <div>FIG.07 / v4</div>
+  </div>
+</footer>
+
+<script>
+  // IntersectionObserver reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Smooth nav active state
+  const navLinks = document.querySelectorAll('nav ul a');
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+
 </body>
 </html>
